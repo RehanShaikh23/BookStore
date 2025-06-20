@@ -1,6 +1,7 @@
 import React from 'react';
 import { BookOpen, Mail, Phone, MapPin, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import NewsletterSubscription from './NewsletterSubscription';
 
 const Footer = () => {
   return (
@@ -90,21 +91,7 @@ const Footer = () => {
 
         {/* Newsletter Signup */}
         <div className="border-t border-coffee-700 mt-12 pt-8">
-          <div className="max-w-md mx-auto text-center">
-            <h3 className="text-lg font-semibold text-coffee-100 mb-4">
-              Stay Updated with New Releases
-            </h3>
-            <div className="flex space-x-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-2 bg-coffee-700 border border-coffee-600 rounded-lg text-coffee-100 placeholder-coffee-400 focus:outline-none focus:ring-2 focus:ring-coffee-500"
-              />
-              <button className="px-6 py-2 bg-coffee-600 hover:bg-coffee-500 text-white rounded-lg font-medium transition-colors">
-                Subscribe
-              </button>
-            </div>
-          </div>
+          <NewsletterSubscription />
         </div>
 
         {/* Bottom Bar */}
