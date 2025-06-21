@@ -26,6 +26,7 @@ const NewsletterSubscription = () => {
     setMessage('');
 
     try {
+<<<<<<< HEAD
       
       emailjs.init('EHogLe3GJZ-0mSNHy'); 
 
@@ -33,20 +34,35 @@ const NewsletterSubscription = () => {
       await emailjs.send(
         'service_v3cqb5f', 
         'template_hamd4th', 
+=======
+      emailjs.init('EHogLe3GJZ-0mSNHy');
+
+      await emailjs.send(
+        'service_v3cqb5f',
+        'template_hamd4th',
+>>>>>>> 709e8f3 (Updated Changes)
         {
           email: email,
           subscriber_email: email,
           message: `New newsletter subscription from: ${email}`,
           subject: 'New BookHaven Newsletter Subscription'
         },
+<<<<<<< HEAD
          'EHogLe3GJZ-0mSNHy'
+=======
+        'EHogLe3GJZ-0mSNHy'
+>>>>>>> 709e8f3 (Updated Changes)
       );
 
       setStatus('success');
-      setMessage('Thank you for subscribing! You\'ll receive our latest updates soon.');
+      setMessage("Thank you for subscribing! You'll receive our latest updates soon.");
       setEmail('');
+<<<<<<< HEAD
       
       
+=======
+
+>>>>>>> 709e8f3 (Updated Changes)
       setTimeout(() => {
         setStatus('idle');
         setMessage('');
@@ -56,8 +72,12 @@ const NewsletterSubscription = () => {
       console.error('EmailJS Error:', error);
       setStatus('error');
       setMessage('Something went wrong. Please try again later.');
+<<<<<<< HEAD
       
       
+=======
+
+>>>>>>> 709e8f3 (Updated Changes)
       setTimeout(() => {
         setStatus('idle');
         setMessage('');
@@ -73,9 +93,7 @@ const NewsletterSubscription = () => {
           <h3 className="text-xl font-semibold text-green-800 mb-2">
             Subscription Successful!
           </h3>
-          <p className="text-green-700">
-            {message}
-          </p>
+          <p className="text-green-700">{message}</p>
         </div>
       </div>
     );
@@ -114,7 +132,7 @@ const NewsletterSubscription = () => {
             )}
           </button>
         </div>
-        
+
         {status === 'error' && message && (
           <div className="flex items-center space-x-2 text-red-400 text-sm">
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
@@ -122,7 +140,7 @@ const NewsletterSubscription = () => {
           </div>
         )}
       </form>
-      
+
       <p className="text-coffee-400 text-xs mt-3">
         We respect your privacy. Unsubscribe at any time.
       </p>
