@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Edit, Trash2, Search, Filter, BookOpen } from 'lucide-react';
 import { useBooks } from '../contexts/BookContext';
 import { useAuth } from '../contexts/AuthContext';
-import BookCard from '../components/BookCard';
+import LazyBookCard from '../components/LazyBookCard';
 
 const MyBooks = () => {
   const { books, deleteBook } = useBooks();
@@ -191,7 +191,7 @@ const MyBooks = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {filteredBooks.map((book) => (
-                  <BookCard
+                  <LazyBookCard
                     key={book.id}
                     book={book}
                     showActions={true}

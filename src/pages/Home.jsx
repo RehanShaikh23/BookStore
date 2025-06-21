@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, Users, Star, Truck, Shield, Award } from 'lucide-react';
 import { useBooks } from '../contexts/BookContext';
-import BookCard from '../components/BookCard';
+import LazyBookCard from '../components/LazyBookCard';
 
 const Home = () => {
   const { books } = useBooks();
@@ -139,7 +139,7 @@ const Home = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
             {featuredBooks.map((book) => (
-              <BookCard key={book.id} book={book} />
+              <LazyBookCard key={book.id} book={book} />
             ))}
           </div>
           <div className="text-center md:hidden">
@@ -167,7 +167,7 @@ const Home = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {topRatedBooks.map((book) => (
-              <BookCard key={book.id} book={book} />
+              <LazyBookCard key={book.id} book={book} />
             ))}
           </div>
         </div>

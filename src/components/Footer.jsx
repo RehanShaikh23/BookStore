@@ -1,7 +1,7 @@
 import React from 'react';
 import { BookOpen, Mail, Phone, MapPin, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import NewsletterSubscription from './NewsletterSubscription';
+import LazyNewsletterSubscription from './LazyNewsletterSubscription';
 
 const Footer = () => {
   return (
@@ -91,7 +91,7 @@ const Footer = () => {
 
         {/* Newsletter Signup */}
         <div className="border-t border-coffee-700 mt-12 pt-8">
-          <NewsletterSubscription />
+          <LazyNewsletterSubscription />
         </div>
 
         {/* Bottom Bar */}

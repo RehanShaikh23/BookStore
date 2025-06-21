@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Filter, Grid, List, SortAsc, Search } from 'lucide-react';
 import { useBooks } from '../contexts/BookContext';
-import BookCard from '../components/BookCard';
+import LazyBookCard from '../components/LazyBookCard';
 
 const Books = () => {
   const { 
@@ -213,7 +213,7 @@ const Books = () => {
         ) : viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {sortedBooks.map((book) => (
-              <BookCard key={book.id} book={book} />
+              <LazyBookCard key={book.id} book={book} />
             ))}
           </div>
         ) : (
