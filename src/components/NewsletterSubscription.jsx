@@ -26,43 +26,24 @@ const NewsletterSubscription = () => {
     setMessage('');
 
     try {
-<<<<<<< HEAD
-      
-      emailjs.init('EHogLe3GJZ-0mSNHy'); 
-
-      
-      await emailjs.send(
-        'service_v3cqb5f', 
-        'template_hamd4th', 
-=======
       emailjs.init('EHogLe3GJZ-0mSNHy');
 
       await emailjs.send(
         'service_v3cqb5f',
         'template_hamd4th',
->>>>>>> 709e8f3 (Updated Changes)
         {
           email: email,
           subscriber_email: email,
           message: `New newsletter subscription from: ${email}`,
           subject: 'New BookHaven Newsletter Subscription'
         },
-<<<<<<< HEAD
-         'EHogLe3GJZ-0mSNHy'
-=======
         'EHogLe3GJZ-0mSNHy'
->>>>>>> 709e8f3 (Updated Changes)
       );
 
       setStatus('success');
       setMessage("Thank you for subscribing! You'll receive our latest updates soon.");
       setEmail('');
-<<<<<<< HEAD
-      
-      
-=======
 
->>>>>>> 709e8f3 (Updated Changes)
       setTimeout(() => {
         setStatus('idle');
         setMessage('');
@@ -72,12 +53,7 @@ const NewsletterSubscription = () => {
       console.error('EmailJS Error:', error);
       setStatus('error');
       setMessage('Something went wrong. Please try again later.');
-<<<<<<< HEAD
-      
-      
-=======
 
->>>>>>> 709e8f3 (Updated Changes)
       setTimeout(() => {
         setStatus('idle');
         setMessage('');
