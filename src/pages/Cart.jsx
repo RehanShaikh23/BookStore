@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from 'lucide-react';
+import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, CheckCircle, Package, Truck, Calendar, X } from 'lucide-react';
 import { useBooks } from '../contexts/BookContext';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -8,6 +8,8 @@ const Cart = () => {
   const { cart, updateCartQuantity, removeFromCart, getCartTotal, clearCart } = useBooks();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [orderNumber, setOrderNumber] = useState('');
 
   const handleQuantityChange = (bookId, newQuantity) => {
     if (newQuantity <= 0) {
@@ -22,9 +24,28 @@ const Cart = () => {
       navigate('/login', { state: { from: { pathname: '/cart' } } });
       return;
     }
-    // Implement checkout logic
-    alert('Checkout functionality would be implemented here!');
+    
+    // Generate order number
+    const orderNum = 'BH' + Date.now().toString().slice(-8);
+    setOrderNumber(orderNum);
+    setShowSuccessModal(true);
   };
+
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
+    clearCart();
+    navigate('/dashboard');
+  };
+
+  const calculateTotal = () => {
+    const subtotal = getCartTotal();
+    const shipping = subtotal >= 25 ? 0 : 4.99;
+    const tax = subtotal * 0.08;
+    return subtotal + shipping + tax;
+  };
+
+  const estimatedDelivery = new Date();
+  estimatedDelivery.setDate(estimatedDelivery.getDate() + 5);
 
   if (cart.length === 0) {
     return (
@@ -195,7 +216,7 @@ const Cart = () => {
                 <div className="flex justify-between text-lg font-semibold">
                   <span className="text-coffee-900">Total</span>
                   <span className="text-coffee-900">
-                    ${(getCartTotal() + (getCartTotal() >= 25 ? 0 : 4.99) + getCartTotal() * 0.08).toFixed(2)}
+                    ${calculateTotal().toFixed(2)}
                   </span>
                 </div>
 
@@ -235,6 +256,118 @@ const Cart = () => {
             </div>
           </div>
         </div>
+
+        {/* Success Modal */}
+        {showSuccessModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden animate-slide-up">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-green-500 to-green-600 px-6 py-8 text-center relative">
+                <button
+                  onClick={handleCloseModal}
+                  className="absolute top-4 right-4 text-white hover:text-green-100 transition-colors"
+                >
+                  <X className="h-6 w-6" />
+                </button>
+                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle className="h-12 w-12 text-green-500" />
+                </div>
+                <h2 className="text-2xl font-serif font-bold text-white mb-2">
+                  Order Confirmed!
+                </h2>
+                <p className="text-green-100">
+                  Thank you for your purchase
+                </p>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 space-y-6">
+                {/* Order Details */}
+                <div className="text-center">
+                  <div className="bg-coffee-50 rounded-lg p-4 mb-4">
+                    <p className="text-sm text-coffee-600 mb-1">Order Number</p>
+                    <p className="text-xl font-bold text-coffee-900">{orderNumber}</p>
+                  </div>
+                  <p className="text-coffee-600">
+                    Your order has been successfully placed and is being processed.
+                  </p>
+                </div>
+
+                {/* Order Summary */}
+                <div className="border-t border-coffee-200 pt-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-coffee-600">Items:</span>
+                    <span className="font-medium">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
+                  </div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-coffee-600">Total:</span>
+                    <span className="font-bold text-lg text-coffee-900">${calculateTotal().toFixed(2)}</span>
+                  </div>
+                </div>
+
+                {/* Delivery Info */}
+                <div className="bg-blue-50 rounded-lg p-4">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="bg-blue-100 p-2 rounded-full">
+                      <Truck className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-coffee-900">Estimated Delivery</h4>
+                      <p className="text-sm text-coffee-600">
+                        {estimatedDelivery.toLocaleDateString('en-US', { 
+                          weekday: 'long', 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2 text-sm text-coffee-600">
+                    <Package className="h-4 w-4" />
+                    <span>Free shipping included</span>
+                  </div>
+                </div>
+
+                {/* Next Steps */}
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-coffee-900">What's Next?</h4>
+                  <div className="space-y-2 text-sm text-coffee-600">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span>Order confirmation email sent</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                      <span>Processing your order</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-coffee-300 rounded-full"></div>
+                      <span>Shipping notification coming soon</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="space-y-3 pt-4">
+                  <button
+                    onClick={handleCloseModal}
+                    className="w-full bg-coffee-600 hover:bg-coffee-700 text-white py-3 px-4 rounded-lg font-semibold transition-colors"
+                  >
+                    Continue Shopping
+                  </button>
+                  <Link
+                    to="/dashboard"
+                    onClick={handleCloseModal}
+                    className="block w-full bg-coffee-100 hover:bg-coffee-200 text-coffee-800 py-3 px-4 rounded-lg font-medium text-center transition-colors"
+                  >
+                    View Dashboard
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
