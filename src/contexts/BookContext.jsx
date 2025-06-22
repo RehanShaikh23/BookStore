@@ -173,28 +173,43 @@ export const BookProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    // Initialize books from localStorage or use default
-    const storedBooks = localStorage.getItem('books');
-    const storedCart = localStorage.getItem('cart');
-    
-    if (storedBooks) {
-      dispatch({ type: 'SET_BOOKS', payload: JSON.parse(storedBooks) });
-    } else {
+    try {
+      // Initialize books from localStorage or use default
+      const storedBooksData = localStorage.getItem('books');
+      const storedCartData = localStorage.getItem('cart');
+      
+      if (storedBooksData && storedBooksData !== 'undefined') {
+        const storedBooks = JSON.parse(storedBooksData);
+        dispatch({ type: 'SET_BOOKS', payload: storedBooks });
+      } else {
+        localStorage.setItem('books', JSON.stringify(initialBooks));
+        dispatch({ type: 'SET_BOOKS', payload: initialBooks });
+      }
+
+      if (storedCartData && storedCartData !== 'undefined') {
+        const storedCart = JSON.parse(storedCartData);
+        dispatch({ type: 'CLEAR_CART' });
+        storedCart.forEach(item => {
+          dispatch({ type: 'ADD_TO_CART', payload: item });
+        });
+      }
+    } catch (error) {
+      console.error('Error loading data from localStorage:', error);
+      // Clear invalid data and use defaults
+      localStorage.removeItem('books');
+      localStorage.removeItem('cart');
       localStorage.setItem('books', JSON.stringify(initialBooks));
       dispatch({ type: 'SET_BOOKS', payload: initialBooks });
-    }
-
-    if (storedCart) {
-      dispatch({ type: 'CLEAR_CART' });
-      JSON.parse(storedCart).forEach(item => {
-        dispatch({ type: 'ADD_TO_CART', payload: item });
-      });
     }
   }, []);
 
   useEffect(() => {
-    // Save cart to localStorage whenever it changes
-    localStorage.setItem('cart', JSON.stringify(state.cart));
+    try {
+      // Save cart to localStorage whenever it changes
+      localStorage.setItem('cart', JSON.stringify(state.cart));
+    } catch (error) {
+      console.error('Error saving cart to localStorage:', error);
+    }
   }, [state.cart]);
 
   const addBook = (bookData) => {

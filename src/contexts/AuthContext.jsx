@@ -48,11 +48,19 @@ export const AuthProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    // Check for existing user session
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      dispatch({ type: 'LOGIN', payload: JSON.parse(storedUser) });
-    } else {
+    try {
+      // Check for existing user session
+      const storedUser = localStorage.getItem('user');
+      if (storedUser && storedUser !== 'undefined') {
+        const parsedUser = JSON.parse(storedUser);
+        dispatch({ type: 'LOGIN', payload: parsedUser });
+      } else {
+        dispatch({ type: 'SET_LOADING', payload: false });
+      }
+    } catch (error) {
+      console.error('Error parsing stored user:', error);
+      // Clear invalid data
+      localStorage.removeItem('user');
       dispatch({ type: 'SET_LOADING', payload: false });
     }
   }, []);
@@ -66,7 +74,9 @@ export const AuthProvider = ({ children }) => {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Get users from localStorage
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const usersData = localStorage.getItem('users');
+      const users = usersData && usersData !== 'undefined' ? JSON.parse(usersData) : [];
+      
       const user = users.find(u => 
         (u.email === credentials.email || u.username === credentials.username) && 
         u.password === credentials.password
@@ -82,6 +92,7 @@ export const AuthProvider = ({ children }) => {
         return { success: false, error: 'Invalid credentials' };
       }
     } catch (error) {
+      console.error('Login error:', error);
       dispatch({ type: 'SET_ERROR', payload: 'Login failed' });
       return { success: false, error: 'Login failed' };
     }
@@ -96,7 +107,8 @@ export const AuthProvider = ({ children }) => {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Get existing users
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const usersData = localStorage.getItem('users');
+      const users = usersData && usersData !== 'undefined' ? JSON.parse(usersData) : [];
       
       // Check if user already exists
       const existingUser = users.find(u => u.email === userData.email || u.username === userData.username);
@@ -120,6 +132,7 @@ export const AuthProvider = ({ children }) => {
       dispatch({ type: 'LOGIN', payload: userWithoutPassword });
       return { success: true };
     } catch (error) {
+      console.error('Registration error:', error);
       dispatch({ type: 'SET_ERROR', payload: 'Registration failed' });
       return { success: false, error: 'Registration failed' };
     }
